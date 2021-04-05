@@ -3,32 +3,41 @@ package guru.springframework.domain;
 import javax.persistence.*;
 import java.util.Set;
 
+/**
+ * Created by jt on 6/13/17.
+ */
 @Entity
 public class Recipe {
-// IDENTITY will generate a sequence to be the primary key
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String description;
-    private String prepTime;
-    private String cookTime;
-    private String servings;
+    private Integer prepTime;
+    private Integer cookTime;
+    private Integer servings;
     private String source;
     private String url;
     private String directions;
 
-    @Enumerated(value = EnumType.STRING)
-    private Difficulty difficulty;
-//                                       the property on the child class
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
     private Set<Ingredient> ingredients;
 
     @Lob
     private Byte[] image;
-// specifying the cascade here means that the recipe owns the notes, if recipe is deleted then note will be deleted.
+
+    @Enumerated(value = EnumType.STRING)
+    private Difficulty difficulty;
+
     @OneToOne(cascade = CascadeType.ALL)
-    private Note note;
+    private Notes notes;
+
+    @ManyToMany
+    @JoinTable(name = "recipe_category",
+        joinColumns = @JoinColumn(name = "recipe_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id"))
+    private Set<Category> categories;
 
     public Long getId() {
         return id;
@@ -46,27 +55,27 @@ public class Recipe {
         this.description = description;
     }
 
-    public String getPrepTime() {
+    public Integer getPrepTime() {
         return prepTime;
     }
 
-    public void setPrepTime(String prepTime) {
+    public void setPrepTime(Integer prepTime) {
         this.prepTime = prepTime;
     }
 
-    public String getCookTime() {
+    public Integer getCookTime() {
         return cookTime;
     }
 
-    public void setCookTime(String cookTime) {
+    public void setCookTime(Integer cookTime) {
         this.cookTime = cookTime;
     }
 
-    public String getServings() {
+    public Integer getServings() {
         return servings;
     }
 
-    public void setServings(String servings) {
+    public void setServings(Integer servings) {
         this.servings = servings;
     }
 
@@ -102,12 +111,20 @@ public class Recipe {
         this.image = image;
     }
 
-    public Note getNote() {
-        return note;
+    public Notes getNotes() {
+        return notes;
     }
 
-    public void setNote(Note note) {
-        this.note = note;
+    public void setNotes(Notes notes) {
+        this.notes = notes;
+    }
+
+    public Set<Ingredient> getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(Set<Ingredient> ingredients) {
+        this.ingredients = ingredients;
     }
 
     public Difficulty getDifficulty() {
@@ -118,11 +135,11 @@ public class Recipe {
         this.difficulty = difficulty;
     }
 
-    public Set<Ingredient> getIngredients() {
-        return ingredients;
+    public Set<Category> getCategories() {
+        return categories;
     }
 
-    public void setIngredients(Set<Ingredient> ingredients) {
-        this.ingredients = ingredients;
+    public void setCategories(Set<Category> categories) {
+        this.categories = categories;
     }
 }
