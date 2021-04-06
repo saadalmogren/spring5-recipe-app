@@ -3,17 +3,12 @@ package guru.springframework.domain;
 import javax.persistence.*;
 import java.util.Set;
 
-/**
- * Created by jt on 6/13/17.
- */
 @Entity
 public class Category {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String description;
-
     @ManyToMany(mappedBy = "categories")
     private Set<Recipe> recipes;
 
@@ -33,11 +28,11 @@ public class Category {
         this.description = description;
     }
 
-    public Set<Recipe> getRecipes() {
+    public Set<guru.springframework.domain.Recipe> getRecipes() {
         return recipes;
     }
 
-    public void setRecipes(Set<Recipe> recipes) {
+    public void setRecipes(Set<guru.springframework.domain.Recipe> recipes) {
         this.recipes = recipes;
     }
 }
